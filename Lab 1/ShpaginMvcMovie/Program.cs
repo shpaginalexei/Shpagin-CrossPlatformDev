@@ -1,5 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using MvcMovie.Data;
 var builder = WebApplication.CreateBuilder(args);
-
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<ShpaginMvcMovieContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("ShpaginMvcMovieContext")));
+}
+else
+{
+    builder.Services.AddDbContext<ShpaginMvcMovieContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionMvcMovieContext")));
+}
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
