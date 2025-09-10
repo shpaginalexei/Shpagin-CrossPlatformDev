@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MvcMovie.Data;
-using MvcMovie.Models;
+using ShpaginMvcMovie.Data;
+using ShpaginMvcMovie.Models;
 
 namespace ShpaginMvcMovie.Controllers
 {
