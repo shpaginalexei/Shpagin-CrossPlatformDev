@@ -25,4 +25,7 @@ namespace ShpaginApp.Models
     public string TranslateMemberName(string clrName) => clrName.ToUpper();
     public string TranslateTypeName(string clrName) => clrName.ToUpper();
   }
+
+  [Flags]
+  public enum BookIncludeOptions { Details = 1, Tags = 2 }
 }
