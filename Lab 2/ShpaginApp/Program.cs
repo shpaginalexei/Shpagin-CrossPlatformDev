@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using ShpaginApp.Auth;
 using ShpaginApp.Data.Repositories;
 using ShpaginApp.Data.Services;
 using ShpaginApp.Exceptions;
@@ -10,8 +11,6 @@ using ShpaginApp.Models.Validators;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDatabase(builder.Configuration);
-
-var app = builder.Build();
 
 // ----- Repositories ------ //
 builder.Services.AddScoped<AuthorRepository>();
@@ -24,6 +23,12 @@ builder.Services.AddScoped<AuthorService>();
 builder.Services.AddScoped<TagService>();
 builder.Services.AddScoped<BookService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<AuthService>();
+
+// ----- Auth ------ //
+builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection("AuthSettings"));
+builder.Services.AddAuth(builder.Configuration);
 
 // ----- Controllers ------ //
 builder.Services
@@ -42,7 +47,10 @@ builder.Services.AddExceptionHandler<AppExceptionHandler>();
 builder.Services.AddExceptionHandler<DbExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
-builder.Services.AddSwaggerGen();
+// ----- Swagger ------ //
+builder.Services.AddSwaggerGenWithAuth();
+
+var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
@@ -58,6 +66,7 @@ app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
