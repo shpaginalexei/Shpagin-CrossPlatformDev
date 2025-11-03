@@ -2,6 +2,15 @@
 
 > Разработка приложения Web API (фреймворк.NET)
 
+## Run (Debug)
 
-Туториал: https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-9.0&tabs=visual-studio-code
+```bash
+cd ShpaginApp
+dotnet run --launch-profile https
+```
 
+## Release: Build and Run
+```bash
+dotnet publish -c Release
+dotnet bin/Release/net9.0/publish/ShpaginApp.dll
+```
