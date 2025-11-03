@@ -4,6 +4,7 @@ using ShpaginApp.Data.Repositories;
 using ShpaginApp.Data.Services;
 using ShpaginApp.Exceptions;
 using ShpaginApp.Extentions;
+using ShpaginApp.Models;
 using ShpaginApp.Models.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,6 +48,10 @@ if (app.Environment.IsDevelopment())
 {
   app.UseSwagger();
   app.UseSwaggerUI();
+
+  using var scope = app.Services.CreateScope();
+  var services = scope.ServiceProvider;
+  SeedData.Initialize(services);
 }
 
 app.UseHttpsRedirection();
