@@ -33,16 +33,23 @@ namespace ShpaginApp.Data.Repositories
     {
       var query = _context.UsersBooks.AsNoTracking().Where(ub => ub.BookId == id);
 
-      var ratings = query.Where(ub => ub.Rating.HasValue).Select(ub => ub.Rating!.Value);
-      double averageRating = await ratings.AnyAsync() ? await ratings.AverageAsync() : 0;
+      var data = await query.Select(ub => new
+      {
+        ub.Rating,
+        ub.Favorite,
+        ub.Status
+      }).ToListAsync();
+
+      var ratingsData = data.Where(x => x.Rating.HasValue).Select(x => x.Rating!.Value).ToList();
 
       return new BookStatistics(
-        AverageRating: averageRating,
-        InFavorites: await query.CountAsync(ub => ub.Favorite == true),
-        TotalReaders: await query.CountAsync(),
-        WantToRead: await query.CountAsync(ub => ub.Status == BookStatusEnum.WANT_TO_READ),
-        ReadingNow: await query.CountAsync(ub => ub.Status == BookStatusEnum.READING),
-        Completed: await query.CountAsync(ub => ub.Status == BookStatusEnum.COMPLETED)
+          AverageRating: ratingsData.Count != 0 ? ratingsData.Average() : 0,
+          NumRatings: ratingsData.Count,
+          InFavorites: data.Count(x => x.Favorite == true),
+          TotalReaders: data.Count,
+          WantToRead: data.Count(x => x.Status == BookStatusEnum.WANT_TO_READ),
+          ReadingNow: data.Count(x => x.Status == BookStatusEnum.READING),
+          Completed: data.Count(x => x.Status == BookStatusEnum.COMPLETED)
       );
     }
 
