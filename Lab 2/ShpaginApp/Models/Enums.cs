@@ -13,6 +13,19 @@ namespace ShpaginApp.Models
     EIGHTEEN,
   }
 
+  public static class AgeRatingMapper
+  {
+    public static readonly Dictionary<RussianAgeRatingEnum, string> Labels =
+        new()
+        {
+            { RussianAgeRatingEnum.ZERO, "0+" },
+            { RussianAgeRatingEnum.SIX, "6+" },
+            { RussianAgeRatingEnum.TWELVE, "12+" },
+            { RussianAgeRatingEnum.SIXTEEN, "16+" },
+            { RussianAgeRatingEnum.EIGHTEEN, "18+" },
+        };
+  }
+
   public enum BookStatusEnum
   {
     WANT_TO_READ,

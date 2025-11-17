@@ -9,6 +9,11 @@ namespace ShpaginApp.Models.Mapping
   [UseStaticMapper(typeof(TagMapper))]
   public static partial class BookMapper
   {
+    private static AgeRatingResponse GetAgeRatingResponse(RussianAgeRatingEnum ageRatingEnum)
+    {
+      return new AgeRatingResponse(Value: ageRatingEnum, Label: AgeRatingMapper.Labels[ageRatingEnum]);
+    }
+
     [MapValue(nameof(BookResponse.Statistics), null)]
     [MapperIgnoreSource(nameof(Book.BookAuthors))]
     [MapperIgnoreSource(nameof(Book.BookTags))]

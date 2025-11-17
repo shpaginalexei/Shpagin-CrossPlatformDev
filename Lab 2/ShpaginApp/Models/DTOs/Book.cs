@@ -10,16 +10,20 @@ namespace ShpaginApp.Models.DTOs
     IEnumerable<AuthorItemResponse> Authors
   );
 
+  public record AgeRatingResponse(
+    RussianAgeRatingEnum Value,
+    string Label
+  );
+
   public record BookResponse
   {
     public Guid Id { get; init; }
 
     public required string Name { get; init; }
 
-    // [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? Year { get; init; }
 
-    public RussianAgeRatingEnum? AgeRating { get; init; }
+    public AgeRatingResponse? AgeRating { get; init; }
 
     public string? Publisher { get; init; }
 
@@ -39,6 +43,7 @@ namespace ShpaginApp.Models.DTOs
 
   public record BookStatistics(
     double AverageRating,
+    int NumRatings,
     int InFavorites,
     int TotalReaders,
     int WantToRead,
