@@ -18,7 +18,11 @@ namespace ShpaginApp.Data.Services
     {
       var tag = await _authorRepo.GetByIdAsync(id);
       return tag is null
-        ? throw new AppException(StatusCodes.Status404NotFound, $"Author with id << {id} >> not found")
+        ? throw new AppException(
+          StatusCodes.Status404NotFound,
+          ErrorCodeEnum.NOT_FOUND,
+          $"Author with id << {id} >> not found",
+          new NotFoundByIdDetails(NotFoundTarget.author, id))
         : AuthorMapper.Map(tag);
     }
 
@@ -31,7 +35,12 @@ namespace ShpaginApp.Data.Services
     public async Task<AuthorResponse> UpdatePut(Guid id, UpdateAuthorPutRequest request)
     {
       var author = await _authorRepo.GetByIdAsync(id)
-        ?? throw new AppException(StatusCodes.Status404NotFound, $"Author with id << {id} >> not found");
+        ?? throw new AppException(
+          StatusCodes.Status404NotFound,
+          ErrorCodeEnum.NOT_FOUND,
+          $"Author with id << {id} >> not found",
+          new NotFoundByIdDetails(NotFoundTarget.author, id)
+        );
 
       author.ApplyUpdate(request);
       author = await _authorRepo.UpdateAsync(author);
@@ -41,7 +50,12 @@ namespace ShpaginApp.Data.Services
     public async Task<AuthorResponse> UpdatePatch(Guid id, UpdateAuthorPatchRequest request)
     {
       var author = await _authorRepo.GetByIdAsync(id)
-        ?? throw new AppException(StatusCodes.Status404NotFound, $"Author with id << {id} >> not found");
+        ?? throw new AppException(
+          StatusCodes.Status404NotFound,
+          ErrorCodeEnum.NOT_FOUND,
+          $"Author with id << {id} >> not found",
+          new NotFoundByIdDetails(NotFoundTarget.author, id)
+        );
 
       author.ApplyUpdate(request);
       author = await _authorRepo.UpdateAsync(author);
@@ -51,7 +65,12 @@ namespace ShpaginApp.Data.Services
     public async Task Delete(Guid id)
     {
       if (!await _authorRepo.ExistAsync(id))
-        throw new AppException(StatusCodes.Status404NotFound, $"Author with id << {id} >> not found");
+        throw new AppException(
+          StatusCodes.Status404NotFound,
+          ErrorCodeEnum.NOT_FOUND,
+          $"Author with id << {id} >> not found",
+          new NotFoundByIdDetails(NotFoundTarget.author, id)
+        );
 
       await _authorRepo.DeleteAsync(id);
     }

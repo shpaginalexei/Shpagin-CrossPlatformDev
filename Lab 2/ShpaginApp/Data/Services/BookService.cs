@@ -31,7 +31,12 @@ namespace ShpaginApp.Data.Services
     {
       var book = await _bookRepo.GetByIdAsync(id);
       return book is null
-        ? throw new AppException(StatusCodes.Status404NotFound, $"Book with id << {id} >> not found")
+        ? throw new AppException(
+          StatusCodes.Status404NotFound,
+          ErrorCodeEnum.NOT_FOUND,
+          $"Book with id << {id} >> not found",
+          new NotFoundByIdDetails(NotFoundTarget.book, id)
+        )
         : BookMapper.Map(book);
     }
 
@@ -64,7 +69,12 @@ namespace ShpaginApp.Data.Services
     public async Task<BookResponse> GetOne(Guid id, BookIncludeOptions? include, bool statistics)
     {
       var book = await _bookRepo.GetByIdAsync(id)
-        ?? throw new AppException(StatusCodes.Status404NotFound, $"Book with id << {id} >> not found");
+        ?? throw new AppException(
+          StatusCodes.Status404NotFound,
+          ErrorCodeEnum.NOT_FOUND,
+          $"Book with id << {id} >> not found",
+          new NotFoundByIdDetails(NotFoundTarget.book, id)
+        );
 
       var response = BookMapper.Map(book);
       return MaskBookResponse(response, include, statistics ? await _bookRepo.GetStatisticsByIdAsync(id) : null);
@@ -91,10 +101,20 @@ namespace ShpaginApp.Data.Services
     public async Task<BookResponse> Create(CreateBookRequest request)
     {
       if (!request.AuthorIds.Any())
-        throw new AppException(StatusCodes.Status400BadRequest, "At least one author is required");
+        throw new AppException(
+          StatusCodes.Status400BadRequest,
+          ErrorCodeEnum.VALIDATION_ERROR,
+          "At least one author is required",
+          new ValidationErrorDetails(ValidationErrorField.author_ids, "Хотя бы один автор обязателен")
+        );
 
       if (request.TagIds != null && !request.TagIds.Any())
-        throw new AppException(StatusCodes.Status400BadRequest, "At least one tag is required");
+        throw new AppException(
+          StatusCodes.Status400BadRequest,
+          ErrorCodeEnum.VALIDATION_ERROR,
+          "At least one tag is required",
+          new ValidationErrorDetails(ValidationErrorField.tag_ids, "Хотя бы один тег обязателен")
+        );
 
       var book = await _bookRepo.CreateAsync(BookMapper.Map(request), request.AuthorIds, request.TagIds);
       return BookMapper.Map(book);
@@ -103,10 +123,20 @@ namespace ShpaginApp.Data.Services
     public async Task<BookResponse> UpdatePut(Guid id, UpdateBookPutRequest request)
     {
       var book = await _bookRepo.GetByIdAsync(id)
-        ?? throw new AppException(StatusCodes.Status404NotFound, $"Book with id << {id} >> not found");
+        ?? throw new AppException(
+          StatusCodes.Status404NotFound,
+          ErrorCodeEnum.NOT_FOUND,
+          $"Book with id << {id} >> not found",
+          new NotFoundByIdDetails(NotFoundTarget.book, id)
+        );
 
       if (!request.AuthorIds.Any())
-        throw new AppException(StatusCodes.Status400BadRequest, "At least one author is required");
+        throw new AppException(
+          StatusCodes.Status400BadRequest,
+          ErrorCodeEnum.VALIDATION_ERROR,
+          "At least one author is required",
+          new ValidationErrorDetails(ValidationErrorField.author_ids, "Хотя бы один автор обязателен")
+        );
 
       book.ApplyUpdate(request);
       book = await _bookRepo.UpdateAsync(book, request.AuthorIds, request.TagIds);
@@ -116,10 +146,20 @@ namespace ShpaginApp.Data.Services
     public async Task<BookResponse> UpdatePatch(Guid id, UpdateBookPatchRequest request)
     {
       var book = await _bookRepo.GetByIdAsync(id)
-        ?? throw new AppException(StatusCodes.Status404NotFound, $"Book with id << {id} >> not found");
+        ?? throw new AppException(
+          StatusCodes.Status404NotFound,
+          ErrorCodeEnum.NOT_FOUND,
+          $"Book with id << {id} >> not found",
+          new NotFoundByIdDetails(NotFoundTarget.book, id)
+        );
 
       if (request.AuthorIds != null && !request.AuthorIds.Any())
-        throw new AppException(StatusCodes.Status400BadRequest, "At least one author is required");
+        throw new AppException(
+          StatusCodes.Status400BadRequest,
+          ErrorCodeEnum.VALIDATION_ERROR,
+          "At least one author is required",
+          new ValidationErrorDetails(ValidationErrorField.author_ids, "Хотя бы один автор обязателен")
+        );
 
       book.ApplyUpdate(request);
       book = await _bookRepo.UpdateAsync(book, request.AuthorIds, request.TagIds);
@@ -129,7 +169,12 @@ namespace ShpaginApp.Data.Services
     public async Task Delete(Guid id)
     {
       if (!await _bookRepo.ExistAsync(id))
-        throw new AppException(StatusCodes.Status404NotFound, $"Book with id << {id} >> not found");
+        throw new AppException(
+          StatusCodes.Status404NotFound,
+          ErrorCodeEnum.NOT_FOUND,
+          $"Book with id << {id} >> not found",
+          new NotFoundByIdDetails(NotFoundTarget.book, id)
+        );
 
       await _bookRepo.DeleteAsync(id);
     }

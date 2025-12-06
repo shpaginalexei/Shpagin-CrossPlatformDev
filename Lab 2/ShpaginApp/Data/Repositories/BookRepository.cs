@@ -94,8 +94,12 @@ namespace ShpaginApp.Data.Repositories
         var missingAuthorIds = authorIds.Except(existingAuthorIds).ToList();
         if (missingAuthorIds.Count != 0)
         {
-          throw new AppException(StatusCodes.Status400BadRequest,
-            $"Authors with ids << {string.Join(", ", missingAuthorIds)} >> not found");
+          throw new AppException(
+            StatusCodes.Status400BadRequest,
+            ErrorCodeEnum.VALIDATION_ERROR,
+            $"Authors with ids << {string.Join(", ", missingAuthorIds)} >> not found",
+            new ValidationErrorDetails(ValidationErrorField.author_ids, "Хотя бы один автор обязателен")
+          );
         }
 
         var bookAuthors = existingAuthorIds.Select(authorId => new BookAuthor
@@ -116,8 +120,12 @@ namespace ShpaginApp.Data.Repositories
           var missingTagIds = tagIds.Except(existingTagIds).ToList();
           if (missingTagIds.Count != 0)
           {
-            throw new AppException(StatusCodes.Status400BadRequest,
-              $"Tags with ids << {string.Join(", ", missingTagIds)} >> not found");
+            throw new AppException(
+            StatusCodes.Status400BadRequest,
+            ErrorCodeEnum.VALIDATION_ERROR,
+            $"Tags with ids << {string.Join(", ", missingTagIds)} >> not found",
+            new ValidationErrorDetails(ValidationErrorField.tag_ids, "Хотя бы один тег обязателен")
+          );
           }
 
           var bookTags = existingTagIds.Select(tagId => new BookTag
@@ -168,8 +176,12 @@ namespace ShpaginApp.Data.Repositories
 
           if (missingAuthorIds.Count != 0)
           {
-            throw new AppException(StatusCodes.Status400BadRequest,
-              $"Authors with ids << {string.Join(", ", missingAuthorIds)} >> not found");
+            throw new AppException(
+              StatusCodes.Status400BadRequest,
+              ErrorCodeEnum.VALIDATION_ERROR,
+              $"Authors with ids << {string.Join(", ", missingAuthorIds)} >> not found",
+              new ValidationErrorDetails(ValidationErrorField.author_ids, "Хотя бы один автор обязателен")
+            );
           }
 
           var currentAuthorIds = existing.Authors.Select(a => a.Id).ToHashSet();
@@ -191,8 +203,12 @@ namespace ShpaginApp.Data.Repositories
           var missingTagIds = tagIds.Except(existingTagIds).ToList();
           if (missingTagIds.Count != 0)
           {
-            throw new AppException(StatusCodes.Status400BadRequest,
-                $"Tags with ids << {string.Join(", ", missingTagIds)} >> not found");
+            throw new AppException(
+              StatusCodes.Status400BadRequest,
+              ErrorCodeEnum.VALIDATION_ERROR,
+              $"Tags with ids << {string.Join(", ", missingTagIds)} >> not found",
+              new ValidationErrorDetails(ValidationErrorField.tag_ids, "Хотя бы один тег обязателен")
+            );
           }
 
           var currentTagIds = existing.Tags.Select(t => t.Id).ToHashSet();

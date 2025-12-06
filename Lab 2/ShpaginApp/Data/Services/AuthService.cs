@@ -20,7 +20,11 @@ namespace ShpaginApp.Data.Services
 
     public async Task<string> Login(LoginCommand request)
     {
-      static AppException Unauthorized() => new(StatusCodes.Status401Unauthorized, "Invalid credentials");
+      static AppException Unauthorized() => new(
+        StatusCodes.Status401Unauthorized,
+        ErrorCodeEnum.UNAUTHORIZED,
+        "Неверный логин или пароль"
+      );
 
       var user = await _userRepo.GetByUserNameAsync(request.UserName)
         ?? throw Unauthorized();

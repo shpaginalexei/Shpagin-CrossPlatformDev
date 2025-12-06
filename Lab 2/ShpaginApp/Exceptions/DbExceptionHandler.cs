@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ShpaginApp.Exceptions
 {
-  internal sealed class DbExceptionHandler : IExceptionHandler
+  public sealed class DbExceptionHandler : IExceptionHandler
   {
     public async ValueTask<bool> TryHandleAsync(
       HttpContext httpContext,
@@ -16,11 +16,10 @@ namespace ShpaginApp.Exceptions
       await HandleException.HandleAsync(httpContext, new AppError
       {
         Status = StatusCodes.Status400BadRequest,
-        Error = "Database Error",
-        Detail = dbMessage
+        ErrorCode = ErrorCodeEnum.DATABASE_ERROR,
+        Message = dbMessage
       });
       return true;
     }
   }
 }
-

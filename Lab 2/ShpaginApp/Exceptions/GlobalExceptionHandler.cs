@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Diagnostics;
 
 namespace ShpaginApp.Exceptions
 {
-  internal static class HandleException
+  public static class HandleException
   {
     public static Task HandleAsync(HttpContext context, AppError error)
     {
@@ -11,7 +11,7 @@ namespace ShpaginApp.Exceptions
     }
   }
 
-  internal sealed class GlobalExceptionHandler(
+  public sealed class GlobalExceptionHandler(
     ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
   {
     private readonly ILogger<GlobalExceptionHandler> _logger = logger;
@@ -22,13 +22,16 @@ namespace ShpaginApp.Exceptions
       CancellationToken cancellationToken)
     {
       _logger.LogError(exception, "Unhandled error");
-      await HandleException.HandleAsync(
-        httpContext, new AppError
-        {
-          Status = StatusCodes.Status500InternalServerError,
-          Error = "Unexpected server error",
-          Detail = GetExceptionChainAndMessages(exception),
-        });
+
+      var error = new AppError
+      {
+        Status = StatusCodes.Status500InternalServerError,
+        ErrorCode = ErrorCodeEnum.INTERNAL_SERVER_ERROR,
+        Message = "An unexpected error occurred",
+        Details = GetExceptionChainAndMessages(exception)
+      };
+
+      await HandleException.HandleAsync(httpContext, error);
       return true;
     }
 

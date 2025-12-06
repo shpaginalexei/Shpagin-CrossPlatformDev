@@ -18,7 +18,12 @@ namespace ShpaginApp.Data.Services
     {
       var tag = await _tagRepo.GetByIdAsync(id);
       return tag is null
-        ? throw new AppException(StatusCodes.Status404NotFound, $"Tag with id << {id} >> not found")
+        ? throw new AppException(
+          StatusCodes.Status404NotFound,
+          ErrorCodeEnum.NOT_FOUND,
+          $"Tag with id << {id} >> not found",
+          new NotFoundByIdDetails(NotFoundTarget.tag, id)
+        )
         : TagMapper.Map(tag);
     }
 
@@ -31,7 +36,12 @@ namespace ShpaginApp.Data.Services
     public async Task<TagResponse> Update(Guid id, UpdateTagRequest request)
     {
       var tag = await _tagRepo.GetByIdAsync(id)
-        ?? throw new AppException(StatusCodes.Status404NotFound, $"Tag with id << {id} >> not found");
+        ?? throw new AppException(
+          StatusCodes.Status404NotFound,
+          ErrorCodeEnum.NOT_FOUND,
+          $"Tag with id << {id} >> not found",
+          new NotFoundByIdDetails(NotFoundTarget.tag, id)
+        );
 
       tag.ApplyUpdate(request);
       tag = await _tagRepo.UpdateAsync(tag);
@@ -41,7 +51,12 @@ namespace ShpaginApp.Data.Services
     public async Task Delete(Guid id)
     {
       if (!await _tagRepo.ExistAsync(id))
-        throw new AppException(StatusCodes.Status404NotFound, $"Tag with id << {id} >> not found");
+        throw new AppException(
+          StatusCodes.Status404NotFound,
+          ErrorCodeEnum.NOT_FOUND,
+          $"Tag with id << {id} >> not found",
+          new NotFoundByIdDetails(NotFoundTarget.tag, id)
+        );
 
       await _tagRepo.DeleteAsync(id);
     }
