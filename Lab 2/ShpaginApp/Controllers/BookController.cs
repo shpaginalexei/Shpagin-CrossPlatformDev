@@ -25,7 +25,7 @@ namespace ShpaginApp.Controllers
     }
 
     [HttpGet("{id}")]
-    // [Authorize(Roles = $"{AuthRoles.Admin},{AuthRoles.User}")]
+    [Authorize(Roles = $"{AuthRoles.Admin},{AuthRoles.User}")]
     public async Task<ActionResult<BookResponse>> GetOne(
       Guid id,
       [FromQuery] bool statistics,
@@ -69,7 +69,7 @@ namespace ShpaginApp.Controllers
     }
 
     [HttpGet("search")]
-    // [Authorize(Roles = $"{AuthRoles.Admin},{AuthRoles.User}")]
+    [Authorize(Roles = $"{AuthRoles.Admin},{AuthRoles.User}")]
     public async Task<ActionResult> Search(
       [FromQuery] BookSearchRequest searchRequest,
       [FromQuery] BookIncludeOptions? include,
