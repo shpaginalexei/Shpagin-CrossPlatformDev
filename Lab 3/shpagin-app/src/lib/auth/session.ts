@@ -20,7 +20,6 @@ export async function setAccessToken(token: string, rememberMe: boolean) {
   const payload = decodeToken(token);
   const cookieOptions: CookieOptions = {
     secure: false,
-    sameSite: "lax",
     path: "/",
   };
 
