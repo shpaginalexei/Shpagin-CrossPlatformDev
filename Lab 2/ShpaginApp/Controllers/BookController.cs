@@ -18,14 +18,14 @@ namespace ShpaginApp.Controllers
     private readonly BookService _service = service;
 
     [HttpGet("all")]
-    [Authorize(Roles = $"{AuthRoles.Admin},{AuthRoles.User}")]
+    // [Authorize(Roles = $"{AuthRoles.Admin},{AuthRoles.User}")]
     public async Task<ActionResult<IEnumerable<BookItemResponse>>> GetAll()
     {
       return Ok(await _service.GetAll());
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = $"{AuthRoles.Admin},{AuthRoles.User}")]
+    // [Authorize(Roles = $"{AuthRoles.Admin},{AuthRoles.User}")]
     public async Task<ActionResult<BookResponse>> GetOne(
       Guid id,
       [FromQuery] bool statistics,
@@ -69,7 +69,7 @@ namespace ShpaginApp.Controllers
     }
 
     [HttpGet("search")]
-    [Authorize(Roles = $"{AuthRoles.Admin},{AuthRoles.User}")]
+    // [Authorize(Roles = $"{AuthRoles.Admin},{AuthRoles.User}")]
     public async Task<ActionResult> Search(
       [FromQuery] BookSearchRequest searchRequest,
       [FromQuery] BookIncludeOptions? include,

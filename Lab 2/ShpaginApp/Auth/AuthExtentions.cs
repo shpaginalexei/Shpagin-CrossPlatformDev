@@ -8,7 +8,6 @@ namespace ShpaginApp.Auth
   {
     public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
     {
-
       var authOptions = configuration.GetSection("AuthSettings").Get<AuthOptions>()
         ?? throw new InvalidOperationException("AuthSettings section is missing in configuration.");
 

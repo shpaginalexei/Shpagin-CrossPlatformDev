@@ -76,7 +76,7 @@ namespace ShpaginApp.Controllers
 
     [HttpGet("{userId}/books/{bookId}")]
     [Authorize(Roles = $"{AuthRoles.Admin},{AuthRoles.User}")]
-    public async Task<ActionResult<IEnumerable<UserBookResponse>>> GetBook(Guid userId, Guid bookId)
+    public async Task<ActionResult<UserBookResponse>> GetBook(Guid userId, Guid bookId)
     {
       var books = await _service.GetBook(userId, bookId);
       return Ok(books);
