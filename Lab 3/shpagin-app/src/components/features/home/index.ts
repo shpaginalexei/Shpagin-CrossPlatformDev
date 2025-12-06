@@ -1,0 +1,1 @@
+export { HelloContent } from "./hello";

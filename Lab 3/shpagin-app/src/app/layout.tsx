@@ -1,12 +1,21 @@
-import "@/styles/globals.css";
+import { JetBrains_Mono, Nunito } from "next/font/google";
+
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import { Geist } from "next/font/google";
 
-const fontSans = Geist({
-  variable: "--font-geist",
+import { Toaster } from "@/components/ui/sonner";
+
+import "@/styles/globals.css";
+
+const fontSans = Nunito({
+  variable: "--font-nunito",
   display: "swap",
-  weight: "400",
+  subsets: ["cyrillic"],
+});
+
+const fontMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  display: "swap",
   subsets: ["cyrillic"],
 });
 
@@ -25,6 +34,7 @@ export const metadata: Metadata = {
       },
     ],
   },
+  description: "Сайт с книгами",
 };
 
 export default function RootLayout({
@@ -34,10 +44,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" suppressHydrationWarning>
-      <body className={`${fontSans.className} antialiased`}>
+      <body
+        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased`}
+      >
         <ThemeProvider attribute="class" enableSystem defaultTheme="system">
           {children}
         </ThemeProvider>
+        <Toaster richColors position="bottom-right" />
       </body>
     </html>
   );

@@ -1,8 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-   devIndicators: false
   /* config options here */
+  experimental: {
+    authInterrupts: true,
+  },
 };
 
 export default nextConfig;
