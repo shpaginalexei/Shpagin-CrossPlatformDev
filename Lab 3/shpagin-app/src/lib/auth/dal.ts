@@ -15,7 +15,11 @@ export const getUser = cache(async (): Promise<AuthContextType> => {
   if (!session)
     return { isAuth: false, session, user: null } as AuthContextType;
 
-  const user = await usersApi.findOne(session.id);
-
-  return { isAuth: true, session, user } as AuthContextType;
+  try {
+    const user = await usersApi.findOne(session.id);
+    return { isAuth: true, session, user } as AuthContextType;
+  } catch (e) {
+    console.warn("[Get User Error]:", e);
+    return { isAuth: false, session, user: null } as AuthContextType;
+  }
 });
