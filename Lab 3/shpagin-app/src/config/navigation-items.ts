@@ -5,7 +5,6 @@ import {
   LuSettings,
   LuSettings2,
   LuStar,
-  LuUser,
 } from "react-icons/lu";
 
 import { MenuItem } from "@/types/common";
@@ -33,11 +32,6 @@ export const userMenu: MenuItem[] = [
     href: "/collection",
     name: "Коллекция",
     icon: LuArchive,
-  },
-  {
-    href: "/profile",
-    name: "Профиль",
-    icon: LuUser,
   },
 ] as const;
 

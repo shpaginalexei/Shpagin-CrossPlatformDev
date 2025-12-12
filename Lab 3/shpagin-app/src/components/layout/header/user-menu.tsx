@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { FaUser } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
 import { LuLogOut } from "react-icons/lu";
@@ -12,7 +14,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -44,18 +45,23 @@ export function UserMenu({ user }: ProfileButtonProps) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-48" align="end">
-        <DropdownMenuLabel>
-          <div className="flex flex-col space-y-1 p-1">
-            <p className="leading-none font-medium">
-              {/* FIXME если очень длинный */}
-              {user?.user_name || "Мой аккаунт"}
-            </p>
-            <p className="text-muted-foreground text-xs leading-none">
-              {/* FIXME если очень длинный */}
-              {user?.email}
-            </p>
-          </div>
-        </DropdownMenuLabel>
+        <DropdownMenuItem asChild>
+          <Link
+            href="/profile"
+            className="flex items-center gap-2 hover:cursor-pointer"
+          >
+            <div className="flex flex-col space-y-1 p-1">
+              <p className="leading-none font-medium">
+                {/* FIXME если очень длинный */}
+                {user?.user_name || "Мой аккаунт"}
+              </p>
+              <p className="text-muted-foreground text-xs leading-none">
+                {/* FIXME если очень длинный */}
+                {user?.email}
+              </p>
+            </div>
+          </Link>
+        </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 
