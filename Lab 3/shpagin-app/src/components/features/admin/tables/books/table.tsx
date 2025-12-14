@@ -150,11 +150,7 @@ export function BooksTable({ books, authors, tags }: BooksTableProps) {
         addAction={(data: AddBookSchema) => AddBookAction(data)}
       />
       <div className="no-scrollbar w-full overflow-x-auto">
-        <ContentTable
-          items={books}
-          columns={columns(authors, tags)}
-          getRowHref={(book) => `/books/${book.id}`}
-        />
+        <ContentTable items={books} columns={columns(authors, tags)} />
       </div>
     </div>
   );
