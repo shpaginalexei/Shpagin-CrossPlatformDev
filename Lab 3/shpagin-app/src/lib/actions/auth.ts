@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import { authApi, LoginRequest, RegisterRequest } from "@/lib/api/auth";
+import { authApi } from "@/lib/api";
 import { deleteAccessToken, setAccessToken } from "@/lib/auth/session";
 import { LoginFormSchema } from "@/lib/schemas/login";
 import { RegistrationFormSchema } from "@/lib/schemas/registration";
@@ -22,7 +22,7 @@ export async function RegisterAction(
   values: RegistrationFormSchema,
 ): Promise<ActionResponse<RegistrationFormSchema>> {
   try {
-    await authApi.register(values as RegisterRequest);
+    await authApi.register(values);
 
     return {
       status: "success",
@@ -63,7 +63,7 @@ export async function LoginAction(
   values: LoginFormSchema,
 ): Promise<ActionResponse<LoginFormSchema>> {
   try {
-    const response = await authApi.login(values as LoginRequest);
+    const response = await authApi.login(values);
     await setAccessToken(response.access_token, values.rememberMe || false);
 
     return { status: "success", message: "Добро пожаловать!" };

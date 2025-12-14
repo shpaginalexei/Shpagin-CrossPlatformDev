@@ -6,10 +6,10 @@ import Link from "next/link";
 import { LuArrowRight, LuBook } from "react-icons/lu";
 
 import { Button } from "@/components/ui/button";
-import { Book } from "@/types/api";
+import { BookItem } from "@/types/api";
 
 interface HelloContentProps {
-  booksPromise: Promise<Book[]>;
+  booksPromise: Promise<BookItem[]>;
 }
 
 export function HelloContent({ booksPromise }: HelloContentProps) {

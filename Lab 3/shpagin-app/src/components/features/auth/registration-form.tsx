@@ -73,9 +73,7 @@ export function RegistrationForm() {
           }
         }
         toast.error(result.message);
-      }
-      //
-      else {
+      } else {
         setRegError(false);
 
         toast.success(result.message);

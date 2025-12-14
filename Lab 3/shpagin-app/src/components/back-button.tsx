@@ -11,8 +11,12 @@ interface BackButtonProps {
 export function BackButton({ className }: BackButtonProps) {
   const router = useRouter();
 
+  const onClick = () => {
+    router.back();
+  };
+
   return (
-    <button type="button" onClick={() => router.back()} className={className}>
+    <button type="button" onClick={onClick} className={className}>
       <span className="text-muted-foreground hover:text-accent-foreground flex items-center gap-2 text-sm">
         <FiArrowLeft /> Назад
       </span>

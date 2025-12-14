@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import { booksApi } from "@/lib/api/books";
+import { booksApi } from "@/lib/api";
 import { BooksSearchContent } from "@/components/features/books/content";
 import { ContentContainer } from "@/components/layout";
 import { LoadingFallback } from "@/components/loading-fallback";
@@ -10,7 +10,7 @@ async function BooksSearchContentWrapper({ searchParams }: BooksPageProps) {
   const currentPage = Number(page) || 1;
   const pageSize = Number(page_size) || 20;
 
-  const booksPromise = booksApi.search({
+  const booksPromise = booksApi.searchWithPagination({
     page: currentPage,
     pageSize: pageSize,
     ...(search ? { query: search } : {}),

@@ -1,3 +1,5 @@
+import { LuBookCheck, LuEye, LuStar } from "react-icons/lu";
+
 export interface User {
   id: string;
   is_admin: boolean;
@@ -15,12 +17,40 @@ export enum BookStatus {
   COMPLETED = "COMPLETED",
 }
 
+export function TranslateStatus(status: BookStatus) {
+  switch (status) {
+    case BookStatus.WANT_TO_READ: {
+      return "Хочу прочитать";
+    }
+    case BookStatus.READING: {
+      return "Читаю";
+    }
+    case BookStatus.COMPLETED: {
+      return "Прочитано";
+    }
+  }
+}
+
+export function StatusIcon(status: BookStatus) {
+  switch (status) {
+    case BookStatus.WANT_TO_READ: {
+      return LuStar;
+    }
+    case BookStatus.READING: {
+      return LuEye;
+    }
+    case BookStatus.COMPLETED: {
+      return LuBookCheck;
+    }
+  }
+}
+
 export interface UserBook {
   id: string;
   name: string;
   favorite: boolean | null;
   rating: number | null;
   status: BookStatus | null;
-  created_at: string;
+  added_at: string;
   updated_at: string;
 }

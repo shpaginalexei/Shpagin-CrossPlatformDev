@@ -108,14 +108,6 @@ namespace ShpaginApp.Data.Services
           new ValidationErrorDetails(ValidationErrorField.author_ids, "Хотя бы один автор обязателен")
         );
 
-      if (request.TagIds != null && !request.TagIds.Any())
-        throw new AppException(
-          StatusCodes.Status400BadRequest,
-          ErrorCodeEnum.VALIDATION_ERROR,
-          "At least one tag is required",
-          new ValidationErrorDetails(ValidationErrorField.tag_ids, "Хотя бы один тег обязателен")
-        );
-
       var book = await _bookRepo.CreateAsync(BookMapper.Map(request), request.AuthorIds, request.TagIds);
       return BookMapper.Map(book);
     }

@@ -1,13 +1,6 @@
 import { useState } from "react";
 
-import {
-  LuBookCheck,
-  LuCheck,
-  LuEllipsis,
-  LuEye,
-  LuStar,
-  LuX,
-} from "react-icons/lu";
+import { LuCheck, LuEllipsis, LuX } from "react-icons/lu";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -22,7 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { BookStatus } from "@/types/api/user";
+import { BookStatus, StatusIcon, TranslateStatus } from "@/types/api";
 
 const options = [
   {
@@ -32,18 +25,18 @@ const options = [
   },
   {
     status: BookStatus.WANT_TO_READ,
-    name: "Хочу прочитать",
-    icon: LuStar,
+    name: TranslateStatus(BookStatus.WANT_TO_READ),
+    icon: StatusIcon(BookStatus.WANT_TO_READ),
   },
   {
     status: BookStatus.READING,
-    name: "Читаю",
-    icon: LuEye,
+    name: TranslateStatus(BookStatus.READING),
+    icon: StatusIcon(BookStatus.READING),
   },
   {
     status: BookStatus.COMPLETED,
-    name: "Прочитано",
-    icon: LuBookCheck,
+    name: TranslateStatus(BookStatus.COMPLETED),
+    icon: StatusIcon(BookStatus.COMPLETED),
   },
 ];
 

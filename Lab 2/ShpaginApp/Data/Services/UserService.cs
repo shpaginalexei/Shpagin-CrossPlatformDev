@@ -10,10 +10,10 @@ namespace ShpaginApp.Data.Services
     private readonly UserRepository _userRepo = userRepo;
     private readonly BookRepository _bookRepo = bookRepo;
 
-    public async Task<IEnumerable<UserItemResponse>> GetAll()
+    public async Task<IEnumerable<UserResponse>> GetAll()
     {
       var users = await _userRepo.GetAllAsync();
-      return users.Select(UserMapper.MapItem).OrderBy(u => u.UserName);
+      return users.Select(UserMapper.Map).OrderBy(u => u.UserName);
     }
 
     public async Task<UserResponse> GetOne(Guid userId)

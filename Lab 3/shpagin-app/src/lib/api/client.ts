@@ -4,7 +4,7 @@ import { ApiError, ErrorCode, IApiError } from "@/types/api/error";
 
 export type RequestOptions = RequestInit & {
   queryParams?: Record<string, string | string[] | number | boolean>;
-  ignoreStatusCodes?: number[];
+  ignoreStatusCodes?: number[]; // FIXME
 };
 
 async function apiRequest<T>(
@@ -113,6 +113,8 @@ function mapStatusToErrorCode(status: number): ErrorCode {
   switch (status) {
     case 401:
       return ErrorCode.UNAUTHORIZED;
+    case 403:
+      return ErrorCode.FORBIDDEN;
     case 404:
       return ErrorCode.NOT_FOUND;
     case 422:
@@ -125,51 +127,74 @@ function mapStatusToErrorCode(status: number): ErrorCode {
 }
 
 export const apiClient = {
-  get: <T>(
-    endpoint: string,
-    options?: RequestOptions,
-    isAuthorized: boolean = true,
-  ) => apiRequest<T>(endpoint, isAuthorized, { method: "GET", ...options }),
+  get: <T>({
+    endpoint,
+    options,
+    isAuthorized = true,
+  }: {
+    endpoint: string;
+    options?: RequestOptions;
+    isAuthorized: boolean;
+  }) => apiRequest<T>(endpoint, isAuthorized, { method: "GET", ...options }),
 
-  post: <T>(
-    endpoint: string,
-    data: unknown,
-    options?: RequestOptions,
-    isAuthorized: boolean = true,
-  ) =>
+  post: <T>({
+    endpoint,
+    data,
+    options,
+    isAuthorized = true,
+  }: {
+    endpoint: string;
+    data: unknown;
+    options?: RequestOptions;
+    isAuthorized: boolean;
+  }) =>
     apiRequest<T>(endpoint, isAuthorized, {
       method: "POST",
       body: JSON.stringify(data),
       ...options,
     }),
 
-  patch: <T>(
-    endpoint: string,
-    data: unknown,
-    options?: RequestOptions,
-    isAuthorized: boolean = true,
-  ) =>
+  patch: <T>({
+    endpoint,
+    data,
+    options,
+    isAuthorized = true,
+  }: {
+    endpoint: string;
+    data: unknown;
+    options?: RequestOptions;
+    isAuthorized: boolean;
+  }) =>
     apiRequest<T>(endpoint, isAuthorized, {
       method: "PATCH",
       body: JSON.stringify(data),
       ...options,
     }),
 
-  put: <T>(
-    endpoint: string,
-    data: unknown,
-    options?: RequestOptions,
-    isAuthorized: boolean = true,
-  ) =>
+  put: <T>({
+    endpoint,
+    data,
+    options,
+    isAuthorized = true,
+  }: {
+    endpoint: string;
+    data: unknown;
+    options?: RequestOptions;
+    isAuthorized: boolean;
+  }) =>
     apiRequest<T>(endpoint, isAuthorized, {
       method: "PUT",
       body: JSON.stringify(data),
       ...options,
     }),
 
-  delete: <T>(
-    endpoint: string,
-    options?: RequestOptions,
-    isAuthorized: boolean = true,
-  ) => apiRequest<T>(endpoint, isAuthorized, { method: "DELETE", ...options }),
+  delete: <T>({
+    endpoint,
+    options,
+    isAuthorized = true,
+  }: {
+    endpoint: string;
+    options?: RequestOptions;
+    isAuthorized: boolean;
+  }) => apiRequest<T>(endpoint, isAuthorized, { method: "DELETE", ...options }),
 };

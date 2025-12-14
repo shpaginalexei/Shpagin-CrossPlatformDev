@@ -43,14 +43,6 @@ namespace ShpaginApp.Models.Mapping
     [MapperIgnoreSource(nameof(User.UserBooks))]
     public static partial UserResponse Map(User user);
 
-    [MapperIgnoreSource(nameof(User.PasswordHash))]
-    [MapperIgnoreSource(nameof(User.DisplayName))]
-    [MapperIgnoreSource(nameof(User.BirthDate))]
-    [MapperIgnoreSource(nameof(User.CreatedAt))]
-    [MapperIgnoreSource(nameof(User.UpdatedAt))]
-    [MapperIgnoreSource(nameof(User.UserBooks))]
-    public static partial UserItemResponse MapItem(User user);
-
     [MapProperty(nameof(CreateUserRequest.Password), nameof(CreateUserCommand.PasswordHash), Use = nameof(GetPasswordHash))]
     public static partial CreateUserCommand Map(CreateUserRequest request);
 

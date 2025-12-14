@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import { booksApi } from "@/lib/api/books";
+import { booksApi } from "@/lib/api";
 import { HelloContent } from "@/components/features/home";
 import { LoadingFallback } from "@/components/loading-fallback";
 

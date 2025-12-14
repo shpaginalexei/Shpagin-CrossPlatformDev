@@ -1,7 +1,8 @@
-import { apiClient } from "@/lib/api/client";
 import { LoginFormSchema } from "@/lib/schemas/login";
 import { RegistrationFormSchema } from "@/lib/schemas/registration";
 import { User } from "@/types/api";
+
+import { apiClient } from "./client";
 
 export type RegisterRequest = Omit<RegistrationFormSchema, "confirmPassword">;
 
@@ -15,8 +16,16 @@ export interface LoginResponse {
 
 export const authApi = {
   register: (data: RegisterRequest) =>
-    apiClient.post<RegisterResponse>("/auth/register", data, {}, false),
+    apiClient.post<RegisterResponse>({
+      endpoint: `/auth/register`,
+      data: data,
+      isAuthorized: false,
+    }),
 
   login: (data: LoginRequest) =>
-    apiClient.post<LoginResponse>("/auth/login", data, {}, false),
+    apiClient.post<LoginResponse>({
+      endpoint: `/auth/login`,
+      data: data,
+      isAuthorized: false,
+    }),
 };

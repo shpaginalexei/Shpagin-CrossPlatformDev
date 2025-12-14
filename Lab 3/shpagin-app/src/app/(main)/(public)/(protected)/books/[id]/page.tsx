@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 
-import { booksApi } from "@/lib/api/books";
-import { usersApi } from "@/lib/api/user";
+import { booksApi, usersApi } from "@/lib/api";
 import { getUser } from "@/lib/auth/dal";
 import { BackButton } from "@/components/back-button";
 import { BookContent } from "@/components/features/books/details";
@@ -15,16 +14,16 @@ interface ContentProps {
 }
 
 async function BookContentWrapper({ bookId, bookPromise }: ContentProps) {
-  const { user } = await getUser();
+  const { user } = await getUser(); // FIXME
+  if (!user) return null;
 
-  const userBookPromise = user
-    ? usersApi.findBook(user.id, bookId)
-    : Promise.resolve(null);
+  const userBookPromise = usersApi.findBook(user.id, bookId);
 
   return (
     <Suspense fallback={<LoadingFallback className="flex-1" />}>
       <BookContent
         bookPromise={bookPromise}
+        userId={user.id}
         userBookPromise={userBookPromise}
       />
     </Suspense>

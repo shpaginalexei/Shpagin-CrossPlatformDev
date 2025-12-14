@@ -1,43 +1,75 @@
-import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
+"use client";
+
+import { useState } from "react";
+
+import { FaRegStar, FaStar } from "react-icons/fa";
+import { toast } from "sonner";
+
+import { SetRatingAction } from "@/lib/actions/api";
 
 interface StarRatingProps {
-  rating: number;
+  userId: string;
+  bookId: string;
+  initialRating: number | null;
   totalReviews?: number;
   showNumber?: boolean;
+  readOnly?: boolean;
 }
 
 export function StarRating({
-  rating,
-  totalReviews,
-  showNumber = true,
+  userId,
+  bookId,
+  initialRating,
+  readOnly = false,
 }: StarRatingProps) {
-  const renderStars = () => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      if (rating >= i) {
-        stars.push(<FaStar key={i} className={`size-6 text-yellow-500`} />);
-      } else if (rating >= i - 0.5) {
-        stars.push(
-          <FaStarHalfAlt key={i} className={`size-6 text-yellow-500`} />,
-        );
+  const [rating, setRating] = useState<number | null>(initialRating);
+  const [hoverRating, setHoverRating] = useState<number | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const starsCount = 5;
+  const currentRating = hoverRating !== null ? hoverRating : rating;
+
+  const handleClick = async (newRating: number) => {
+    if (readOnly || isSaving) return;
+    setIsSaving(true);
+    try {
+      const result = await SetRatingAction(userId, bookId, newRating);
+      if (result.status === "success") {
+        setRating(newRating);
+        toast.success("Рейтинг успешно обновлен");
       } else {
-        stars.push(
-          <FaRegStar key={i} className={`text-muted-foreground size-6`} />,
-        );
+        toast.error(result.message || "Ошибка при сохранении рейтинга");
       }
+    } catch {
+      toast.error("Ошибка при сохранении рейтинга");
+    } finally {
+      setIsSaving(false);
     }
-    return stars;
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex items-center gap-0.5">{renderStars()}</div>
-      {showNumber && (
-        <span className="text-muted-foreground text-sm">
-          {rating.toFixed(2)}
-          {totalReviews !== undefined && ` (${totalReviews})`}
-        </span>
-      )}
+    <div className="flex gap-1">
+      {[...Array(starsCount)].map((_, i) => {
+        const starIndex = i + 1;
+        const isFilled = currentRating !== null && starIndex <= currentRating;
+        return (
+          <button
+            key={starIndex}
+            type="button"
+            onClick={() => handleClick(starIndex)}
+            onMouseEnter={() => !readOnly && setHoverRating(starIndex)}
+            onMouseLeave={() => !readOnly && setHoverRating(null)}
+            disabled={isSaving || readOnly}
+            className="focus:outline-none"
+          >
+            {isFilled ? (
+              <FaStar className="size-6 text-yellow-400" />
+            ) : (
+              <FaRegStar className="text-muted-foreground size-6" />
+            )}
+          </button>
+        );
+      })}
     </div>
   );
 }

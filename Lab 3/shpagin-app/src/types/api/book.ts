@@ -1,10 +1,28 @@
 import { Author } from "@/types/api/author";
 import { Tag } from "@/types/api/tag";
 
-export interface AgeRating {
-  code: string;
-  label: string;
-}
+export type AgeRating =
+  | { value: "ZERO"; label: "0+" }
+  | { value: "SIX"; label: "6+" }
+  | { value: "TWELVE"; label: "12+" }
+  | { value: "SIXTEEN"; label: "16+" }
+  | { value: "EIGHTEEN"; label: "18+" };
+
+export const ageRatingValues = [
+  "ZERO",
+  "SIX",
+  "TWELVE",
+  "SIXTEEN",
+  "EIGHTEEN",
+] as const;
+
+export const ageRatingList = [
+  { value: "ZERO", label: "0+" },
+  { value: "SIX", label: "6+" },
+  { value: "TWELVE", label: "12+" },
+  { value: "SIXTEEN", label: "16+" },
+  { value: "EIGHTEEN", label: "18+" },
+] as const;
 
 export interface BookStatistics {
   average_rating: number;
@@ -28,6 +46,12 @@ export interface Book {
   created_at: string | null;
   updated_at: string | null;
   statistics: BookStatistics | null;
+}
+
+export interface BookItem {
+  id: string;
+  name: string;
+  authors: Author[];
 }
 
 export interface PaginatedResult<T> {

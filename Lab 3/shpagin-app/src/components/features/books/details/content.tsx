@@ -1,51 +1,71 @@
 "use client";
 
-import { use, useMemo, useState } from "react";
+import { use, useCallback, useState } from "react";
 import { notFound } from "next/navigation";
 
 import { FiBook, FiBookOpen } from "react-icons/fi";
+import { toast } from "sonner";
 
+import { SetLikeAction, SetStatusAction } from "@/lib/actions/api";
 import { BOOK_LOGO_GRADIENT } from "@/lib/constants";
-import { cn, uuidToColor } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { StarRating } from "@/components/features/books/details/star-rating";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Book } from "@/types/api";
-import { UserBook } from "@/types/api/user";
+import { Book, BookStatus, UserBook } from "@/types/api";
 
 import { Like } from "./like";
-import { StarRating } from "./star-rating";
 import { Status } from "./status";
+import { BookTags } from "./tags";
 
 interface BookContentProps {
   bookPromise: Promise<Book | null>;
+  userId: string;
   userBookPromise: Promise<UserBook | null>;
 }
 
 export function BookContent({
   bookPromise,
+  userId,
   userBookPromise,
 }: BookContentProps) {
   const book = use(bookPromise) ?? notFound();
   const userBook = use(userBookPromise);
 
-  const isAuth = userBook !== undefined;
   const hasUserBook = userBook !== null;
 
   const [isLiked, setIsLiked] = useState(
-    isAuth ? (hasUserBook ? userBook.favorite : false) : null,
+    hasUserBook ? !!userBook.favorite : false,
   );
   const [status, setStatus] = useState(
-    isAuth ? (hasUserBook ? userBook.status : null) : null,
+    hasUserBook ? (userBook.status ? userBook.status : null) : null,
   );
 
-  const tagStyles = useMemo(() => {
-    if (!book.tags) return [];
+  const handleToggleLike = useCallback(async () => {
+    const next = !isLiked;
 
-    return book.tags.map((tag) => ({
-      "--tag-light": uuidToColor(tag.id, tag.value, false),
-      "--tag-dark": uuidToColor(tag.id, tag.value, true),
-    }));
-  }, [book.tags]);
+    const result = await SetLikeAction(userId, book.id, next);
+
+    if (result.status === "error") {
+      toast.error(result.message);
+    } else {
+      setIsLiked(next);
+      toast.success(result.message);
+    }
+  }, [isLiked, userId, book.id]);
+
+  const handleToggleStatus = useCallback(
+    async (newStatus: BookStatus | null) => {
+      const result = await SetStatusAction(userId, book.id, newStatus);
+
+      if (result.status === "error") {
+        toast.error(result.message);
+      } else {
+        setStatus(newStatus);
+        toast.success(result.message);
+      }
+    },
+    [userId, book.id],
+  );
 
   return (
     <div className="flex-1">
@@ -63,7 +83,7 @@ export function BookContent({
         {/* Карточка */}
         <Card className="col-start-2 h-full w-full shadow-lg transition-shadow">
           <CardHeader className="flex items-center">
-            <CardTitle className="mt-2 line-clamp-3 text-3xl">
+            <CardTitle className="mt-2 line-clamp-2 text-3xl whitespace-break-spaces">
               {book.name}
             </CardTitle>
           </CardHeader>
@@ -81,15 +101,17 @@ export function BookContent({
             {/* Рейтинг со ссылкой на отзывы */}
             <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
               <div className="flex items-center justify-between gap-3">
+                <Like value={isLiked!} onValueChange={handleToggleLike} />
                 {book.statistics && (
                   <StarRating
-                    rating={book.statistics?.average_rating}
+                    userId={userId}
+                    bookId={book.id}
+                    initialRating={userBook?.rating || 0}
                     totalReviews={book.statistics?.num_ratings}
                   />
                 )}
-                {isAuth && <Like value={isLiked!} onValueChange={setIsLiked} />}
               </div>
-              {isAuth && <Status value={status} onValueChange={setStatus} />}
+              <Status value={status} onValueChange={handleToggleStatus} />
             </div>
 
             {/* Авторы */}
@@ -117,7 +139,7 @@ export function BookContent({
                   <p className="text-muted-foreground text-xs font-semibold">
                     Издательство
                   </p>
-                  <p className="text-lg">{book.publisher}</p>
+                  <p className="line-clamp-4 text-lg">{book.publisher}</p>
                 </div>
               )}
               {book.age_rating && (
@@ -136,23 +158,7 @@ export function BookContent({
                 <p className="text-muted-foreground mb-2 text-sm font-semibold">
                   Теги
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {book.tags.map((tag, key) => (
-                    <Badge
-                      key={key}
-                      variant="secondary"
-                      className="text-accent-foreground bg-(--tag-light) dark:bg-(--tag-dark)"
-                      style={
-                        {
-                          "--tag-light": tagStyles[key]["--tag-light"],
-                          "--tag-dark": tagStyles[key]["--tag-dark"],
-                        } as React.CSSProperties
-                      }
-                    >
-                      {tag.value}
-                    </Badge>
-                  ))}
-                </div>
+                <BookTags tags={book.tags} />
               </div>
             )}
 

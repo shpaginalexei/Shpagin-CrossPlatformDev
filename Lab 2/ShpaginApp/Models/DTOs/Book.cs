@@ -65,8 +65,8 @@ namespace ShpaginApp.Models.DTOs
     [Required, MinLength(1, ErrorMessage = "At least one author id required")]
     public IEnumerable<Guid> AuthorIds { get; init; } = null!;
 
-    [MinLength(1, ErrorMessage = "At least one tag id required")]
-    public IEnumerable<Guid>? TagIds { get; init; }
+    // [MinLength(1, ErrorMessage = "At least one tag id required")]
+    public IEnumerable<Guid> TagIds { get; init; } = null!;
 
     [MaxLength(255)]
     public string? Publisher { get; init; }

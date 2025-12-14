@@ -9,9 +9,9 @@ namespace ShpaginApp.Data.Services
   {
     private readonly AuthorRepository _authorRepo = authorRepo;
 
-    public async Task<IEnumerable<AuthorItemResponse>> GetAll()
+    public async Task<IEnumerable<AuthorResponse>> GetAll()
     {
-      return (await _authorRepo.GetAllAsync()).Select(AuthorMapper.MapItem);
+      return (await _authorRepo.GetAllAsync()).Select(AuthorMapper.Map);
     }
 
     public async Task<AuthorResponse> GetOne(Guid id)

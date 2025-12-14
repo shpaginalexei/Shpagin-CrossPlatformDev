@@ -2,7 +2,7 @@ import "server-only";
 
 import { cache } from "react";
 
-import { usersApi } from "@/lib/api/user";
+import { usersApi } from "@/lib/api";
 
 import { decodeToken } from "./decode";
 import { getAccessToken } from "./session";

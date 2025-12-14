@@ -17,13 +17,6 @@ namespace ShpaginApp.Models.DTOs
     DateTime UpdatedAt
   );
 
-  public record UserItemResponse(
-    Guid Id,
-    bool IsAdmin,
-    string UserName,
-    string Email
-  );
-
   public record UserResponse(
     Guid Id,
     bool IsAdmin,

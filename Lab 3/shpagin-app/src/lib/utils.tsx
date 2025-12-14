@@ -1,3 +1,5 @@
+import { JSX } from "react";
+
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -28,4 +30,18 @@ export function uuidToColor(
     const lightness = 85 + Math.abs((hash >> 8) % 10); // 85-95%
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   }
+}
+
+export function formatDateTime(dateString: string | null): JSX.Element {
+  if (!dateString) return <p className="text-muted-foreground">—</p>;
+  const date = new Date(dateString);
+  return (
+    <p className="text-muted-foreground w-30 text-xs">
+      {date.toLocaleDateString("ru-RU")}{" "}
+      {date.toLocaleTimeString("ru-RU", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}
+    </p>
+  );
 }

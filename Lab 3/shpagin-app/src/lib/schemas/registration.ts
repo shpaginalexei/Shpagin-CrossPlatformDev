@@ -18,13 +18,13 @@ export const registrationFormSchema = z
     display_name: z
       .string()
       .max(32, { message: "Максимум 32 символа" })
-      .nullable(), // Allow null
+      .nullable(),
 
     email: z.email({ message: "Некорректный email" }).trim(),
 
     birth_date: z
       .string()
-      .nullable() // Allow null
+      .nullable()
       .refine((value) => {
         if (!value) return true;
         return !isNaN(new Date(value).getTime());

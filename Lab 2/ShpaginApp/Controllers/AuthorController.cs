@@ -17,7 +17,7 @@ namespace ShpaginApp.Controllers
 
     [HttpGet("all")]
     [Authorize(Roles = $"{AuthRoles.Admin},{AuthRoles.User}")]
-    public async Task<ActionResult<IEnumerable<AuthorItemResponse>>> GetAll()
+    public async Task<ActionResult<IEnumerable<AuthorResponse>>> GetAll()
     {
       var users = await _service.GetAll();
       return Ok(users);

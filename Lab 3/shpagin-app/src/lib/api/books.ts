@@ -1,31 +1,81 @@
-import { apiClient } from "@/lib/api/client";
-import { Book, PaginatedResult } from "@/types/api";
+import { AddBookSchema, UpdateBookSchema } from "@/lib/schemas/book";
+import { Book, BookItem, PaginatedResult } from "@/types/api";
 
-export interface GetBookQueryParams {
+import { apiClient } from "./client";
+
+interface GetBookParams {
   include?: "details" | "tags" | "details,tags";
   statistics?: boolean;
 }
 
-export interface SearchBooksQueryParams extends GetBookQueryParams {
+interface SearchBooksParams extends GetBookParams {
   query?: string;
   authorIds?: string[];
   tagIds?: string[];
   count?: number;
+}
+
+export interface PaginationRequest {
   page: number;
   pageSize: number;
 }
 
-export const booksApi = {
-  getAll: () => apiClient.get<Book[]>(`/books/all`),
+type SearchBooksWithPagination = SearchBooksParams & PaginationRequest;
 
-  search: (params: SearchBooksQueryParams) =>
-    apiClient.get<PaginatedResult<Book>>(`/books/search`, {
-      queryParams: { ...params },
+type UpdateBookParams = UpdateBookSchema;
+type AddBookParams = AddBookSchema;
+
+export const booksApi = {
+  getAll: () =>
+    apiClient.get<BookItem[]>({ endpoint: `/books/all`, isAuthorized: false }),
+
+  search: (params?: SearchBooksParams) =>
+    apiClient.get<Book[]>({
+      endpoint: `/books/search`,
+      options: {
+        queryParams: { ...params },
+      },
+      isAuthorized: true,
     }),
 
-  findOne: (id: string, params: GetBookQueryParams) =>
-    apiClient.get<Book | null>(`/books/${id}`, {
-      queryParams: { ...params },
-      ignoreStatusCodes: [404],
+  searchWithPagination: (params: SearchBooksWithPagination) =>
+    apiClient.get<PaginatedResult<Book>>({
+      endpoint: `/books/search`,
+      options: {
+        queryParams: { ...params },
+      },
+      isAuthorized: true,
+    }),
+
+  findOne: (id: string, params?: GetBookParams) =>
+    apiClient.get<Book | null>({
+      endpoint: `/books/${id}`,
+      options: {
+        queryParams: { ...params },
+        ignoreStatusCodes: [404],
+      },
+      isAuthorized: true,
+    }),
+
+  create: (params: AddBookParams) =>
+    apiClient.post<Book>({
+      endpoint: `/books/create`,
+      data: { ...params },
+      isAuthorized: true,
+    }),
+
+  update: (id: string, params: UpdateBookParams) =>
+    apiClient.put<Book>({
+      endpoint: `/books/update`,
+      data: { ...params },
+      options: { queryParams: { id: id } },
+      isAuthorized: true,
+    }),
+
+  delete: (id: string) =>
+    apiClient.delete<null>({
+      endpoint: `/books/delete`,
+      options: { queryParams: { id: id } },
+      isAuthorized: true,
     }),
 };
