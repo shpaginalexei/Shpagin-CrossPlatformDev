@@ -9,11 +9,11 @@ import { toast } from "sonner";
 import { SetLikeAction, SetStatusAction } from "@/lib/actions/api";
 import { BOOK_LOGO_GRADIENT } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { StarRating } from "@/components/features/books/details/star-rating";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Book, BookStatus, UserBook } from "@/types/api";
 
 import { Like } from "./like";
+import { StarRating } from "./star-rating";
 import { Status } from "./status";
 import { BookTags } from "./tags";
 
@@ -69,7 +69,7 @@ export function BookContent({
 
   return (
     <div className="flex-1">
-      <div className="mb-2 flex w-full items-center gap-3 md:grid md:grid-cols-2">
+      <div className="flex w-full items-center gap-3 md:grid md:grid-cols-2">
         {/* Изображение (desktop) */}
         <div
           className={cn(
@@ -234,11 +234,10 @@ export function BookContent({
         </Card>
       </div>
 
-      {/* Список отзывов //TODO */}
-      <div className="w-full flex-col gap-2 justify-self-end">
-        <div className="text-muted-foreground pt-4 text-right text-xs">
-          <p className="font-mono">ID: {book.id}</p>
-        </div>
+      <div className="mt-4 flex w-full flex-col gap-6 justify-self-end">
+        <p className="text-muted-foreground text-right font-mono text-xs">
+          ID: {book.id}
+        </p>
       </div>
     </div>
   );

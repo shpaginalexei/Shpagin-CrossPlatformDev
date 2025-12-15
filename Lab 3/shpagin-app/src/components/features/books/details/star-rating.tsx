@@ -36,7 +36,7 @@ export function StarRating({
       const result = await SetRatingAction(userId, bookId, newRating);
       if (result.status === "success") {
         setRating(newRating);
-        toast.success("Рейтинг успешно обновлен");
+        toast.success("Рейтинг обновлен");
       } else {
         toast.error(result.message || "Ошибка при сохранении рейтинга");
       }

@@ -10,6 +10,7 @@ import { FiCalendar, FiLock, FiMail, FiUser } from "react-icons/fi";
 import { toast } from "sonner";
 
 import { RegisterAction } from "@/lib/actions/auth";
+import { MIN_DATE } from "@/lib/constants";
 import {
   RegistrationFormSchema,
   registrationFormSchema,
@@ -45,12 +46,12 @@ export function RegistrationForm() {
     resolver: zodResolver(registrationFormSchema),
     mode: "all",
     defaultValues: {
-      display_name: "",
-      email: "test@example.com",
-      user_name: "testuser",
+      display_name: null,
+      email: "",
+      user_name: "",
       birth_date: null,
-      password: "1q2w3e4r5t",
-      confirmPassword: "1q2w3e4r5t",
+      password: "",
+      confirmPassword: "",
     },
   });
 
@@ -188,7 +189,7 @@ export function RegistrationForm() {
                         value={field.value ?? ""}
                         type="date"
                         step="1"
-                        min="1900-01-01"
+                        min={String(MIN_DATE)}
                         max={today}
                         className="text-muted-foreground appearance-none pl-9 text-sm [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                         aria-invalid={!!fieldState.error}

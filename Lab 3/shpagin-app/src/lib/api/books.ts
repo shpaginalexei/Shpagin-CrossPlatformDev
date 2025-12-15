@@ -22,8 +22,8 @@ export interface PaginationRequest {
 
 type SearchBooksWithPagination = SearchBooksParams & PaginationRequest;
 
-type UpdateBookParams = UpdateBookSchema;
-type AddBookParams = AddBookSchema;
+type UpdateBookRequest = UpdateBookSchema;
+type AddBookRequest = AddBookSchema;
 
 export const booksApi = {
   getAll: () =>
@@ -57,14 +57,14 @@ export const booksApi = {
       isAuthorized: true,
     }),
 
-  create: (params: AddBookParams) =>
+  create: (params: AddBookRequest) =>
     apiClient.post<Book>({
       endpoint: `/books/create`,
       data: { ...params },
       isAuthorized: true,
     }),
 
-  update: (id: string, params: UpdateBookParams) =>
+  update: (id: string, params: UpdateBookRequest) =>
     apiClient.put<Book>({
       endpoint: `/books/update`,
       data: { ...params },

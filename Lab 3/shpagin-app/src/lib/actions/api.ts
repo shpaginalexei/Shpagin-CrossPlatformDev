@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { authorsApi, booksApi, tagsApi, usersApi } from "@/lib/api";
+import { UpdateUserPatchRequest } from "@/lib/api/user";
 import { AddBookSchema, UpdateBookSchema } from "@/lib/schemas/book";
 import {
   Author,
@@ -145,6 +146,22 @@ export async function UpdateBookAction(
     return {
       status: "success",
       item: book,
+    };
+  } catch (error) {
+    return { status: "error", ...handleApiError(error) };
+  }
+}
+
+export async function UpdateUserAction(
+  userId: string,
+  schema: UpdateUserPatchRequest,
+): Promise<EditActionResponse<User>> {
+  try {
+    const user = await usersApi.update(userId, schema);
+    revalidatePath("/admin/panel");
+    return {
+      status: "success",
+      item: user,
     };
   } catch (error) {
     return { status: "error", ...handleApiError(error) };

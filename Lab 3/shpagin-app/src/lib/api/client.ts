@@ -27,8 +27,6 @@ async function apiRequest<T>(
     url += `?${params.toString()}`;
   }
 
-  console.log("API Request URL:", url);
-
   // Формирование заголовков
   const defaultHeaders: HeadersInit = {
     "Content-Type": "application/json",
@@ -50,6 +48,8 @@ async function apiRequest<T>(
   };
 
   let response: Response;
+
+  console.log("API Request URL:", url, config);
 
   try {
     response = await fetch(url, config);

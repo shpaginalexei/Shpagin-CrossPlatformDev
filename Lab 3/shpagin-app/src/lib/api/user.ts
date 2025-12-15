@@ -10,15 +10,30 @@ interface AddUserBookRequest {
   status?: BookStatus | null;
 }
 
-interface UpdateUserBookPatchRequest {
-  favorite?: boolean | null;
-  rating?: number | null;
-  status?: BookStatus | null;
-}
+type UpdateUserBookPutRequest = Omit<
+  UserBook,
+  "id" | "name" | "user_id" | "book_id" | "added_at" | "updated_at"
+>;
+
+export type UpdateUserPatchRequest = {
+  user_name?: string;
+  email?: string;
+  password?: string;
+  display_name: string | null;
+  birth_date: string | null;
+};
 
 export const usersApi = {
   getAll: () =>
     apiClient.get<User[]>({ endpoint: `/users/all`, isAuthorized: true }),
+
+  update: (id: string, params: UpdateUserPatchRequest) =>
+    apiClient.patch<User>({
+      endpoint: `/users/update`,
+      data: { ...params },
+      options: { queryParams: { id: id } },
+      isAuthorized: true,
+    }),
 
   findOne: (id: string) =>
     apiClient.get<User | null>({
@@ -47,11 +62,7 @@ export const usersApi = {
       isAuthorized: true,
     }),
 
-  updateBook: (
-    id: string,
-    bookId: string,
-    params: UpdateUserBookPatchRequest,
-  ) =>
+  updateBook: (id: string, bookId: string, params: UpdateUserBookPutRequest) =>
     apiClient.patch<UserBook>({
       endpoint: `/users/${id}/books/update`,
       data: { ...params },

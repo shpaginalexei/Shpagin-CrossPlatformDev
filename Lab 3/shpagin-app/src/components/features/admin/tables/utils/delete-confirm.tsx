@@ -53,7 +53,7 @@ export function DeleteConfirmDialog({
           <LuTrash2 />
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="bg-card">
         <AlertDialogHeader>
           <AlertDialogTitle className="break-all">
             Вы уверены, что хотите удалить {info}?

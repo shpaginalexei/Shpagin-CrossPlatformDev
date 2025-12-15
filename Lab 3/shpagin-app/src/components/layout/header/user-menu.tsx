@@ -51,12 +51,10 @@ export function UserMenu({ user }: ProfileButtonProps) {
             className="flex items-center gap-2 hover:cursor-pointer"
           >
             <div className="flex flex-col space-y-1 p-1">
-              <p className="leading-none font-medium">
-                {/* FIXME если очень длинный */}
+              <p className="line-clamp-1 leading-none font-medium break-all">
                 {user?.user_name || "Мой аккаунт"}
               </p>
-              <p className="text-muted-foreground text-xs leading-none">
-                {/* FIXME если очень длинный */}
+              <p className="text-muted-foreground line-clamp-1 text-xs leading-none break-all">
                 {user?.email}
               </p>
             </div>

@@ -73,6 +73,22 @@ namespace ShpaginApp.Data.Services
           new NotFoundByIdDetails(NotFoundTarget.user, userId)
         );
 
+      if (user.UserName != request.UserName && await _userRepo.ExistNameAsync(request.UserName!))
+        throw new AppException(
+          StatusCodes.Status400BadRequest,
+          ErrorCodeEnum.VALIDATION_ERROR,
+          $"User with username << {request.UserName} >> already exist",
+          new ValidationErrorDetails(ValidationErrorField.user_name, "Пользователь с таким именем уже существует")
+        );
+
+      if (user.Email != request.Email && await _userRepo.ExistEmailAsync(request.Email!))
+        throw new AppException(
+          StatusCodes.Status400BadRequest,
+          ErrorCodeEnum.VALIDATION_ERROR,
+          $"User with email << {request.Email} >> already exist",
+          new ValidationErrorDetails(ValidationErrorField.email, "Пользователь с таким email уже существует")
+        );
+
       user.ApplyUpdate(request);
       user = await _userRepo.UpdateAsync(user);
       return UserMapper.Map(user);
@@ -87,6 +103,24 @@ namespace ShpaginApp.Data.Services
           $"User with id << {userId} >> not found",
           new NotFoundByIdDetails(NotFoundTarget.user, userId)
         );
+
+      if (!string.IsNullOrEmpty(request.UserName) && user.UserName != request.UserName && await _userRepo.ExistNameAsync(request.UserName))
+        throw new AppException(
+          StatusCodes.Status400BadRequest,
+          ErrorCodeEnum.VALIDATION_ERROR,
+          $"User with username << {request.UserName} >> already exist",
+          new ValidationErrorDetails(ValidationErrorField.user_name, "Пользователь с таким именем уже существует")
+        );
+
+      if (!string.IsNullOrEmpty(request.Email) && user.Email != request.Email && await _userRepo.ExistEmailAsync(request.Email))
+      {
+        throw new AppException(
+          StatusCodes.Status400BadRequest,
+          ErrorCodeEnum.VALIDATION_ERROR,
+          $"User with email << {request.Email} >> already exist",
+          new ValidationErrorDetails(ValidationErrorField.email, "Пользователь с таким email уже существует")
+        );
+      }
 
       user.ApplyUpdate(request);
       user = await _userRepo.UpdateAsync(user);

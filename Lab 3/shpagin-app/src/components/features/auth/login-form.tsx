@@ -44,8 +44,8 @@ export function LoginForm() {
     resolver: zodResolver(loginFormSchema),
     mode: "all",
     defaultValues: {
-      user_name: "admin",
-      password: "admin",
+      user_name: "",
+      password: "",
       rememberMe: false,
     },
   });
