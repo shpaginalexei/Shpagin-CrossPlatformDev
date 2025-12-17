@@ -46,7 +46,7 @@ export function HelloContent({ booksPromise }: HelloContentProps) {
           {/* Заголовок */}
           <h1 className="text-5xl font-bold tracking-tight md:text-7xl">
             <span className="from-foreground via-primary to-primary/80 bg-linear-to-r bg-clip-text text-transparent">
-              Исследуйте, Читайте, Растите
+              Исследуйте. Читайте. Растите.
             </span>
           </h1>
 

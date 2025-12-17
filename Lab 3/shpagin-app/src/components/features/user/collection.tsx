@@ -15,15 +15,15 @@ import {
 } from "@/types/api";
 
 const columns: ColumnDef<UserBook>[] = [
-  {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ row }) => (
-      <p className="text-muted-foreground font-mono text-xs leading-tight whitespace-nowrap">
-        {row.original.id}
-      </p>
-    ),
-  },
+  // {
+  //   accessorKey: "id",
+  //   header: "ID",
+  //   cell: ({ row }) => (
+  //     <p className="text-muted-foreground font-mono text-xs leading-tight whitespace-nowrap">
+  //       {row.original.id}
+  //     </p>
+  //   ),
+  // },
   {
     accessorKey: "name",
     header: "Название",

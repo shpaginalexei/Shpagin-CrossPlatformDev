@@ -3,7 +3,8 @@
 import { use, useCallback, useState } from "react";
 import { notFound } from "next/navigation";
 
-import { FiBook, FiBookOpen } from "react-icons/fi";
+import { FiBook } from "react-icons/fi";
+// import { FiBookOpen } from "react-icons/fi";
 import { toast } from "sonner";
 
 import { SetLikeAction, SetStatusAction } from "@/lib/actions/api";
@@ -69,19 +70,19 @@ export function BookContent({
 
   return (
     <div className="flex-1">
-      <div className="flex w-full items-center gap-3 md:grid md:grid-cols-2">
+      <div className="flex w-full items-center gap-3 md:grid md:grid-cols-1">
         {/* Изображение (desktop) */}
-        <div
+        {/* <div
           className={cn(
             "bg-muted hidden aspect-3/4 h-fit w-full max-w-150 items-center justify-center justify-self-end rounded-lg shadow-lg transition-shadow md:flex",
             BOOK_LOGO_GRADIENT,
           )}
         >
           <FiBookOpen className="text-secondary size-24" />
-        </div>
+        </div> */}
 
         {/* Карточка */}
-        <Card className="col-start-2 h-full w-full shadow-lg transition-shadow">
+        <Card className="h-full w-full shadow-lg transition-shadow">
           <CardHeader className="flex items-center">
             <CardTitle className="mt-2 line-clamp-2 text-3xl whitespace-break-spaces">
               {book.name}

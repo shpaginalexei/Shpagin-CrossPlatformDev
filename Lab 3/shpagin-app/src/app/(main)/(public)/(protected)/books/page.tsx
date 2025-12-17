@@ -13,6 +13,7 @@ async function BooksSearchContentWrapper({ searchParams }: BooksPageProps) {
   const booksPromise = booksApi.searchWithPagination({
     page: currentPage,
     pageSize: pageSize,
+    include: "tags",
     ...(search ? { query: search } : {}),
   });
 

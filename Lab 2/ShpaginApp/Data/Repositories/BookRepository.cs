@@ -64,7 +64,12 @@ namespace ShpaginApp.Data.Repositories
         .AsQueryable();
 
       if (!string.IsNullOrWhiteSpace(request.Query))
-        query = query.Where(b => b.Name.Contains(request.Query));
+      {
+        query = query.Where(b => b.Name.Contains(request.Query)
+          || b.Tags.Any(t => t.Value.Contains(request.Query))
+          || b.Authors.Any(a => a.Name.Contains(request.Query))
+        );
+      }
 
       if (request.TagIds != null && request.TagIds.Any())
         query = query.Where(b => b.Tags.Any(t => request.TagIds.Contains(t.Id)));
