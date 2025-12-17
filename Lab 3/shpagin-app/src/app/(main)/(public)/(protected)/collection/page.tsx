@@ -21,9 +21,7 @@ export async function Collection() {
   };
 
   const userBooks = userBooksResult.items
-    .filter(
-      (ub) => ub.favorite !== null || ub.status !== null || ub.rating !== null,
-    )
+    .filter((ub) => ub.favorite || ub.status !== null || ub.rating !== null)
     .sort((a, b) => {
       if (a.status === null) return 1;
       if (b.status === null) return -1;
