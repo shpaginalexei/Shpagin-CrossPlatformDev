@@ -32,16 +32,20 @@ export function StarRating({
   const handleClick = async (newRating: number) => {
     if (readOnly || isSaving) return;
     setIsSaving(true);
+
     try {
-      const result = await SetRatingAction(userId, bookId, newRating);
+      // Если кликнули на уже установленный рейтинг — сбрасываем его в 0 (null)
+      const ratingToSet = newRating === rating ? null : newRating;
+
+      const result = await SetRatingAction(userId, bookId, ratingToSet);
       if (result.status === "success") {
-        setRating(newRating);
+        setRating(ratingToSet === 0 ? null : ratingToSet);
         toast.success("Рейтинг обновлен");
       } else {
-        toast.error(result.message || "Ошибка при сохранении рейтинга");
+        toast.error(result.message);
       }
     } catch {
-      toast.error("Ошибка при сохранении рейтинга");
+      toast.error("Ошибка при обновлении рейтинга");
     } finally {
       setIsSaving(false);
     }
@@ -52,6 +56,7 @@ export function StarRating({
       {[...Array(starsCount)].map((_, i) => {
         const starIndex = i + 1;
         const isFilled = currentRating !== null && starIndex <= currentRating;
+
         return (
           <button
             key={starIndex}
@@ -61,6 +66,7 @@ export function StarRating({
             onMouseLeave={() => !readOnly && setHoverRating(null)}
             disabled={isSaving || readOnly}
             className="focus:outline-none"
+            aria-label={`Оценить ${starIndex} звезд`}
           >
             {isFilled ? (
               <FaStar className="size-6 text-yellow-400" />

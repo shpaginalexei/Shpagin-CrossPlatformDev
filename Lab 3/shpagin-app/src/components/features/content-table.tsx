@@ -36,7 +36,7 @@ export function ContentTable<T>({ items, columns, getRowHref }: TableProps<T>) {
   });
 
   return (
-    <div className="bg-card no-scrollbar w-full flex-1 overflow-x-auto rounded-md border shadow-lg transition-all">
+    <div className="bg-card no-scrollbar w-full overflow-x-auto rounded-md border shadow-lg transition-all">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
